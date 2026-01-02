@@ -1,0 +1,10 @@
+CANNES_TILES_512x512_yolo_labels/
+CANNES_TILES_512x512_PNG/
+excepted/
+*.pt
+__pycache__/
+.ipynb_checkpoints/
+logs/
+runs/
+*.cache
+dataset_yolo/
