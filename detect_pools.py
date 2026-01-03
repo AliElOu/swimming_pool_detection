@@ -7,8 +7,8 @@ Usage:
     python detect_pools.py --image path/to/image.jpg [options]
 
 Output:
-    - coordinates.txt: Pool boundary coordinates
-    - output_image.jpg: Image with red outlines around detected pools
+    - originalname_cord.txt: Pool boundary coordinates
+    - originalname_output.extension: Image with blue outlines around detected pools
 """
 
 import os
@@ -222,17 +222,17 @@ def save_coordinates(contours, output_path, verbose=False):
 
 
 def save_output_image(img, contours, output_path, line_thickness, verbose=False):
-    """Save image with red contours."""
+    """Save image with blue contours."""
     if verbose:
         print(f"\nSaving output image to: {output_path}")
     
     img_output = img.copy()
     
-    # Draw all contours in RED (BGR format - img is already in BGR)
-    RED = (0, 0, 255)  # BGR format for OpenCV
+    # Draw all contours in BLUE (BGR format - img is already in BGR)
+    BLUE = (255, 0, 0)  # BGR format for OpenCV
     
     for contour in contours:
-        cv2.drawContours(img_output, [contour], -1, RED, thickness=line_thickness)
+        cv2.drawContours(img_output, [contour], -1, BLUE, thickness=line_thickness)
     
     # Save image directly (already in BGR format)
     cv2.imwrite(output_path, img_output)
@@ -269,6 +269,11 @@ def main():
     print(f"Input image: {args.image}")
     print(f"Output directory: {output_dir}")
     
+    # Generate output filename from input image name
+    input_path = Path(args.image)
+    output_image_name = f"{input_path.stem}_output{input_path.suffix}"
+    output_coord_name = f"{input_path.stem}_cord.txt"
+    
     # Load image
     try:
         img = np.array(Image.open(args.image).convert("RGB"))
@@ -287,8 +292,8 @@ def main():
     if len(detections) == 0:
         print("\n⚠️  No pools detected.")
         # Still create empty output files
-        save_coordinates([], output_dir / "coordinates.txt", VERBOSE)
-        save_output_image(img, [], output_dir / "output_image.jpg", LINE_THICKNESS, VERBOSE)
+        save_coordinates([], output_dir / output_coord_name, VERBOSE)
+        save_output_image(img, [], output_dir / output_image_name, LINE_THICKNESS, VERBOSE)
         return
     
     # Segment pools
@@ -302,8 +307,8 @@ def main():
     )
     
     # Save outputs
-    save_coordinates(contours, output_dir / "coordinates.txt", VERBOSE)
-    save_output_image(img, contours, output_dir / "output_image.jpg", LINE_THICKNESS, VERBOSE)
+    save_coordinates(contours, output_dir / output_coord_name, VERBOSE)
+    save_output_image(img, contours, output_dir / output_image_name, LINE_THICKNESS, VERBOSE)
     
     print("\n" + "="*60)
     print("✅ Processing complete!")
@@ -311,8 +316,8 @@ def main():
     print(f"Detected pools: {len(detections)}")
     print(f"Segmented pools: {len(contours)}")
     print(f"\nOutput files:")
-    print(f"  - {output_dir / 'coordinates.txt'}")
-    print(f"  - {output_dir / 'output_image.jpg'}")
+    print(f"  - {output_dir / output_coord_name}")
+    print(f"  - {output_dir / output_image_name}")
 
 
 if __name__ == "__main__":
