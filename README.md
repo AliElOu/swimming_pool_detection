@@ -11,7 +11,10 @@ Télécharger et installer Python 3.11.13 depuis [python.org](https://www.python
 ### 2. Installer les dépendances avec versions exactes
 
 ```bash
-# Installer les dépendances principales
+# Option 1: Utiliser le fichier requirements.txt (recommandé)
+pip install -r requirements.txt
+
+# Option 2: Installation manuelle des dépendances principales
 pip install ultralytics==8.3.171 opencv-python==4.10.0.84 pillow==10.4.0 numpy==1.26.4
 
 # Dépendances supplémentaires (installées automatiquement)
