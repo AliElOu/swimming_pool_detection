@@ -247,7 +247,7 @@ def main():
     
     # Configuration (hard-coded defaults)
     YOLO_MODEL = "last.pt"
-    SAM_MODEL = "sam_b.pt"
+    SAM_MODEL = "sam2.1_l.pt"
     CONFIDENCE_THRESHOLD = 0.5
     PADDING_RATIO = 0.0
     LINE_THICKNESS = 2
