@@ -2,36 +2,68 @@
 
 Détecte automatiquement les piscines dans des images aériennes en utilisant YOLO pour la détection et SAM pour la segmentation précise.
 
-## Installation
+## Prérequis
 
-### 1. Installer Python 3.11.13
+- Python 3.11.13
+- Git
+- Git LFS (Large File Storage)
+
+## Installation complète
+
+### 1. Installer Git LFS
+
+Git LFS est nécessaire pour télécharger les fichiers de modèles volumineux (`.pt`).
+
+**Windows :**
+```bash
+# Télécharger depuis https://git-lfs.github.com/
+# Ou avec Chocolatey :
+choco install git-lfs
+
+# Initialiser Git LFS
+git lfs install
+```
+
+**Linux/macOS :**
+```bash
+# Ubuntu/Debian
+sudo apt-get install git-lfs
+
+# macOS
+brew install git-lfs
+
+# Initialiser Git LFS
+git lfs install
+```
+
+### 2. Cloner le projet
+
+```bash
+git clone <URL_DU_REPO>
+cd swimming_pool_detection
+
+# Vérifier que les fichiers LFS ont été téléchargés
+git lfs ls-files
+# Devrait afficher : sam2.1_l.pt
+```
+
+### 3. Installer Python 3.11.13
 
 Télécharger et installer Python 3.11.13 depuis [python.org](https://www.python.org/downloads/release/python-31113/)
 
-### 2. Installer les dépendances avec versions exactes
+### 4. Installer les dépendances avec versions exactes
 
 ```bash
-# Option 1: Utiliser le fichier requirements.txt (recommandé)
 pip install -r requirements.txt
-
-# Option 2: Installation manuelle des dépendances principales
-pip install ultralytics==8.3.171 opencv-python==4.10.0.84 pillow==10.4.0 numpy==1.26.4
-
-# Dépendances supplémentaires (installées automatiquement)
-# torch==2.5.1+cu121
-# torchvision==0.20.1+cu121
-# PyYAML==6.0.2
-# scipy==1.16.1
-# matplotlib==3.10.5
-# pandas==2.2.2
-# seaborn==0.13.2
 ```
 
 ## Fichiers requis
 
+Les fichiers suivants doivent être présents dans le dossier du projet :
+
 - `detect_pools.py` : script principal
-- `last.pt` : modèle YOLO entraîné (détection) - doit être dans le même dossier
-- `sam_b.pt` : modèle SAM (segmentation) - doit être dans le même dossier
+- `last.pt` : modèle YOLO entraîné (détection)
+- `sam2.1_l.pt` : modèle SAM (segmentation) - **téléchargé automatiquement via Git LFS**
 
 ## Usage
 
@@ -79,7 +111,7 @@ Image originale avec contours rouges autour des piscines détectées.
 
 Le script utilise les paramètres suivants (codés en dur dans le script) :
 - **Modèle YOLO** : `last.pt` (doit être présent dans le dossier)
-- **Modèle SAM** : `sam_b.pt` (doit être présent dans le dossier)
+- **Modèle SAM** : `sam2.1_l.pt` (téléchargé via Git LFS)
 - **Seuil de confiance** : 0.5
 - **Post-traitement morphologique** : Activé
 - **Épaisseur du contour** : 2 pixels
@@ -112,18 +144,6 @@ x1 y1
 - Un pool par section
 - Contour **fermé** (le dernier point rejoint automatiquement le premier lors du dessin)
 
-## Troubleshooting
-
-### Aucune piscine détectée
-- Vérifier que le modèle YOLO est bien entraîné sur des images aériennes
-- Si besoin, modifier le seuil de confiance dans le script (variable `CONFIDENCE_THRESHOLD`)
-
-### Contours imprécis / trous
-- Le post-traitement morphologique est activé par défaut et devrait corriger ces problèmes
-- Si nécessaire, ajuster les paramètres dans le script
-
-### Erreur "model not found"
-- Vérifier que `last.pt` et `sam_b.pt` sont présents dans le même dossier que `detect_pools.py`
 
 ## Pipeline technique
 
